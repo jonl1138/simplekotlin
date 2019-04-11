@@ -56,23 +56,25 @@ class Person(firstName:String, lastName:String, age:Int) {
 
 // write a class "Money"
 class Money(amount:Int, currency:String) {
-    var amount:Int = 0
+
+    var amount:Int = amount
         set(value) {
+            println("Setting amount..")
             if (value >= 0) {
                 field = value
             }
     }
-    var currency:String = ""
+    var currency:String = currency
         set(value) {
             if (value in listOf("USD", "EUR", "CAN", "GBP")) {
                 field = value
             }
         }
-    val converter: Map<String, Double> = HashMap(hashMapOf("USD" to 10.0, "GBP" to 5.0, "EUR" to 15.0, "CAN" to 12.5))
+    val converter: Map<String, Double> = hashMapOf("USD" to 10.0, "GBP" to 5.0, "EUR" to 15.0, "CAN" to 12.5)
 
     fun convert(otherCurrency:String): Money {
         if (otherCurrency in listOf("USD", "EUR", "CAN", "GBP")) {
-            val newAmount = amount * (converter["otherCurrency"]!!/ converter["currency"]!!)
+            val newAmount = amount * (converter.get(otherCurrency)!!/ converter.get(currency)!!)
             val finalAmount = newAmount.toInt()
             return Money(finalAmount, otherCurrency)
         }
@@ -86,8 +88,6 @@ class Money(amount:Int, currency:String) {
     }
 }
 
-val money1 = Money(15, "USD")
-println(money1.currency)
 
 // ============ DO NOT EDIT BELOW THIS LINE =============
 
