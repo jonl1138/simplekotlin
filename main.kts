@@ -3,14 +3,91 @@
 println("UW Homework: Simple Kotlin")
 
 // write a "whenFn" that takes an arg of type "Any" and returns a String
+fun whenFn(arg1: Any): String {
+    when(arg1) {
+        "Hello" -> return "world"
+        "Howdy", "Bonjour" -> return "Say what?"
+        0 -> return "zero"
+        1 -> return "one"
+        5, 9 -> return "low number"
+        else -> return "I don't understand" 
+    }
+}
 
 // write an "add" function that takes two Ints, returns an Int, and adds the values
+fun add(arg1:Int, arg2:Int): Int {
+    return arg1 + arg2;
+}
+
 // write a "sub" function that takes two Ints, returns an Int, and subtracts the values
+fun sub(arg1:Int, arg2:Int): Int {
+    return arg1 - arg2;
+}
+
 // write a "mathOp" function that takes two Ints and a function (that takes two Ints and returns an Int), returns an Int, and applies the passed-in-function to the arguments
+fun mathOp(arg1:Int, arg2:Int, body:(arg1:Int,arg2:Int) -> (Int)): Int {
+    return body(arg1, arg2)
+}
 
 // write a class "Person" with first name, last name and age
+class Person(firstName:String, lastName:String, age:Int) {
+   
+    public var firstName:String = firstName
+    public var lastName:String = lastName
+    public var age:Int  = age
+        set(value) {
+            field = value
+            debugString = "[Person firstName:${firstName} lastName:${lastName} age:${age}]"
+        }
+    public var debugString: String = "[Person firstName:${firstName} lastName:${lastName} age:${age}]"
+
+    fun equals(otherPerson: Person): Boolean {
+        return (otherPerson.hashCode() == this.hashCode())
+    }
+    
+    override fun hashCode():Int {
+        var code = 17
+        code = 31 * code + firstName.hashCode()
+        code = 31 * code + lastName.hashCode()
+        code = 31 * code + age
+        return code
+    }
+}
 
 // write a class "Money"
+class Money(amount:Int, currency:String) {
+    var amount:Int = 0
+        set(value) {
+            if (value >= 0) {
+                field = value
+            }
+    }
+    var currency:String = ""
+        set(value) {
+            if (value in listOf("USD", "EUR", "CAN", "GBP")) {
+                field = value
+            }
+        }
+    val converter: Map<String, Double> = HashMap(hashMapOf("USD" to 10.0, "GBP" to 5.0, "EUR" to 15.0, "CAN" to 12.5))
+
+    fun convert(otherCurrency:String): Money {
+        if (otherCurrency in listOf("USD", "EUR", "CAN", "GBP")) {
+            val newAmount = amount * (converter["otherCurrency"]!!/ converter["currency"]!!)
+            val finalAmount = newAmount.toInt()
+            return Money(finalAmount, otherCurrency)
+        }
+        return Money(amount, currency)
+    }
+
+    operator fun plus(other: Money): Money {
+        val convertedMoney:Money = other.convert(currency)
+        val sum:Int = convertedMoney.amount + amount
+        return Money(sum, currency) 
+    }
+}
+
+val money1 = Money(15, "USD")
+println(money1.currency)
 
 // ============ DO NOT EDIT BELOW THIS LINE =============
 
@@ -69,6 +146,7 @@ p1.age = 48
 print(if (p1.debugString == "[Person firstName:Ted lastName:Neward age:48]") "." else "!")
 println("")
 
+
 print("Money tests: ")
 val tenUSD = Money(10, "USD")
 val twelveUSD = Money(12, "USD")
@@ -96,3 +174,4 @@ for ( (pair, result) in moneyadd_tests) {
               (pair.first + pair.second).currency == result.currency) "." else "!")
 }
 println("")
+
